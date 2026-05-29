@@ -1,0 +1,21 @@
+class Solution {
+    public int digSum(int n){
+        int sum=0;
+        if(n<10) return n;
+        while(n>0){
+            sum+=(n%10);
+            n/=10;
+        }
+        System.out.println(sum);
+        return sum;
+    }
+    public int minElement(int[] nums) {
+        int min=Integer.MAX_VALUE;
+        for(int n:nums){
+            int ans=digSum(n);
+            if(min>ans){
+                min=ans;
+            }
+        }return min;
+    }
+}
