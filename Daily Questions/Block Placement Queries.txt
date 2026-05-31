@@ -1,0 +1,56 @@
+class Solution {
+    class SegmentTree{
+        int[]seg;
+        SegmentTree(int n){
+            seg=new int[4*n];
+        }
+        public void update(int idx,int low,int high,int i, int val){
+            if(low==high){
+                seg[idx]=val;
+                return;
+            }
+            int mid=low+(high-low)/2;
+            if(i<=mid){
+                update(2*idx+1,low,mid,i,val);
+            }else{
+                update(2*idx+2,mid+1,high,i,val);
+            }seg[idx]=Math.max(seg[2*idx+1],seg[2*idx+2]);
+        }
+        public int query(int idx,int low,int high,int l,int r){
+            if(r<low||high<l){
+                return 0;
+            }
+            if(l<=low && high<=r){
+                return seg[idx];
+            }
+            int mid=low+(high-low)/2;
+            return Math.max(query(2*idx+1,low,mid,l,r),query(2*idx+2,mid+1,high,l,r));
+        }
+    }
+    public List<Boolean> getResults(int[][] queries) {
+        int max=50005;
+        SegmentTree st=new SegmentTree(max);
+        TreeSet<Integer>ts=new TreeSet<>();
+        ts.add(0);
+        ArrayList<Boolean>res=new ArrayList<>();
+        for(int[]q:queries){
+            if(q[0]==1){
+                int num=q[1];
+                Integer prev=ts.floor(num);
+                Integer next=ts.ceiling(num);
+                ts.add(num);
+                st.update(0,0,max-1,num,num-prev);
+                if(next!=null){
+                    st.update(0,0,max-1,next,next-num);
+                }
+            }else{
+                int x=q[1];
+                int sz=q[2];
+                int best=st.query(0,0,max-1,0,x);
+                Integer prev=ts.floor(x);
+                best=Math.max(best,x-prev);
+                res.add(best>=sz);
+            }
+        }return res;
+    }
+}

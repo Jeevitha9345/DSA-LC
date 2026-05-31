@@ -1,0 +1,28 @@
+class Solution {
+    public List<Boolean> getResults(int[][] queries) {
+        ArrayList<Boolean>res=new ArrayList<>();
+        TreeSet<Integer>ts=new TreeSet<>();
+        for(int[]q:queries){
+            if(q[0]==1){
+                ts.add(q[1]);
+            }else{
+                int x=q[1];
+                int sz=q[2];
+                int prev=0,maxGap=0;
+                for(int obs:ts){
+                    if(obs>x){
+                        break;
+                    }
+                    maxGap=Math.max(maxGap,obs-prev);
+                    prev=obs;
+                }
+                maxGap=Math.max(maxGap,x-prev);
+                if(sz>maxGap){
+                    res.add(false);
+                }else{
+                    res.add(true);
+                }
+            }
+        }return res;
+    }
+}
