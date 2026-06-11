@@ -1,0 +1,30 @@
+class Solution {
+    public int assignEdgeWeights(int[][] edges) {
+        int n=edges.length+1;
+        int mod=1000000007;
+        long ans=1;
+        List<Integer>arr[]=new ArrayList[n+1];
+        for(int i=1;i<=n;i++){
+            arr[i]=new ArrayList<>();
+        }
+        for(int[] edg:edges){
+            int u=edg[0];
+            int v=edg[1];
+            arr[u].add(v);
+            arr[v].add(u);
+        }
+        int dep=dfs(1,0,-1,arr,0);
+        for(int i=1;i<dep;i++){
+            ans=(ans*2)%mod;
+        }
+        return (int)ans;
+    }
+    public int dfs(int node,int dep,int parent,List<Integer>arr[],int max){
+        max=Math.max(max,dep);
+        for(int n:arr[node]){
+            if(n!=parent){
+                max=dfs(n,dep+1,node,arr,max);
+            }
+        }return max;
+    }
+}
